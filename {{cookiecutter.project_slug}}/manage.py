@@ -1,4 +1,8 @@
 import click
+from molten.contrib.sqlalchemy import EngineData
+from {{cookiecutter.project_slug}}.index import create_app
+
+app = create_app()
 
 
 @click.group()
@@ -15,10 +19,7 @@ def runserver(host, port):
     """
     Runs a Werkzueg development server. Do no use for production.
     """
-    from {{cookiecutter.project_slug}}.index import create_app
     from werkzeug.serving import run_simple
-
-    app = create_app()
 
     run_simple(
         hostname=host, port=port, application=app, use_debugger=True, use_reloader=True
@@ -30,23 +31,15 @@ def shell():
     """
     Enters an interactive shell with an app instance and dependency resolver.
     """
+    import rlcompleter
     import readline
     from code import InteractiveConsole
 
-    from {{cookiecutter.project_slug}}.index import create_app
-
-    app = create_app()
-
     helpers = {"app": app, "resolver": app.injector.get_resolver()}
 
-    readline.parse_and_bind("Tab: complete")
+    readline.parse_and_bind("tab: complete")
     interpreter = InteractiveConsole(helpers)
-    interpreter.interact(
-        f"""\
-    Instances in scope: {", ".join(helpers)}.
-    """,
-        "",
-    )
+    interpreter.interact(f"Instances in scope: {', '.join(helpers)}.", "")
 
 
 @cli.command()
@@ -56,8 +49,11 @@ def initdb():
     """
     from {{cookiecutter.project_slug}}.db import Base
 
+    def _init(engine_data: EngineData):
+        Base.metadata.create_all(bind=engine_data.engine)
+
     click.echo("Creating database")
-    Base.metadata.create_all(bind=engine)
+    app.injector.get_resolver().resolve(_init)()
     click.echo("Database created")
 
 
@@ -69,10 +65,13 @@ def dropdb():
 
     from {{cookiecutter.project_slug}}.db import Base
 
+    def _drop(engine_data: EngineData):
+        Base.metadata.drop_all(bind=engine_data.engine)
+
     click.echo("Are you sure you would like to drop the database?: [Y/N]")
     response = input()
     if response.lower() == "y":
-        Base.metadata.drop_all(bind=engine)
+        app.injector.get_resolver().resolve(_drop)()
         click.echo("Database dropped")
     else:
         click.echo("Database drop aborted")
