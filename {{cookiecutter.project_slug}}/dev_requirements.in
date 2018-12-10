@@ -1,0 +1,7 @@
+black
+bumpversion
+flake8
+pip-tools
+pytest
+pytest-cov
+werkzeug
