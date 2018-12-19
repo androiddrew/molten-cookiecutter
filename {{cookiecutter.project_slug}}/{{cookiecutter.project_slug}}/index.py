@@ -1,24 +1,39 @@
+import os
 from typing import Tuple
 from molten import App, Route, ResponseRendererMiddleware
 from molten.http import HTTP_404, Request
 from molten.settings import Settings, SettingsComponent
-from molten.contrib.sqlalchemy import SQLAlchemyMiddleware
+from molten.contrib.sqlalchemy import SQLAlchemyMiddleware, SQLAlchemyEngineComponent, SQLAlchemySessionComponent
 
 from .api.welcome import welcome
+from .api.todo import TodoManagerComponent, todo_routes
 from .common import ExtJSONRenderer
 from .schema import APIResponse
 
-settings = Settings({})
+settings = Settings(
+    {
+        "database_engine_dsn": os.getenv(
+            "DATABASE_DSN", "postgresql://molten:local@localhost/cookiecutter"
+        ),
+        "database_engine_params": {
+            "echo": True,
+            "connect_args": {"options": "-c timezone=utc"},
+        },
+    }
+)
 
 components = [
     SettingsComponent(settings),
+    SQLAlchemyEngineComponent(),
+    SQLAlchemySessionComponent(),
+    TodoManagerComponent(),
 ]
 
 middleware = [ResponseRendererMiddleware(), SQLAlchemyMiddleware()]
 
 renderers = [ExtJSONRenderer()]
 
-routes = [Route("/", welcome, "GET")]
+routes = [Route("/", welcome, "GET")] + [todo_routes]
 
 
 class ExtApp(App):
