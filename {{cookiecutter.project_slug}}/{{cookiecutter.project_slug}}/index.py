@@ -3,14 +3,14 @@ from typing import Tuple
 from molten import App, Route, ResponseRendererMiddleware
 from molten.http import HTTP_404, Request
 from molten.openapi import Metadata, OpenAPIHandler, OpenAPIUIHandler
-from molten.settings import Settings, SettingsComponent
+from molten.settings import SettingsComponent
 from molten.contrib.sqlalchemy import SQLAlchemyMiddleware, SQLAlchemyEngineComponent, SQLAlchemySessionComponent
 
 from .api.welcome import welcome
 from .api.todo import TodoManagerComponent, todo_routes
 from .common import ExtJSONRenderer
 from .schema import APIResponse
-
+from .settings import SETTINGS
 
 get_schema = OpenAPIHandler(
     metadata=Metadata(
@@ -22,20 +22,8 @@ get_schema = OpenAPIHandler(
 
 get_docs = OpenAPIUIHandler()
 
-settings = Settings(
-    {
-        "database_engine_dsn": os.getenv(
-            "DATABASE_DSN", "postgresql://molten:local@localhost/cookiecutter"
-        ),
-        "database_engine_params": {
-            "echo": True,
-            "connect_args": {"options": "-c timezone=utc"},
-        },
-    }
-)
-
 components = [
-    SettingsComponent(settings),
+    SettingsComponent(SETTINGS),
     SQLAlchemyEngineComponent(),
     SQLAlchemySessionComponent(),
     TodoManagerComponent(),
@@ -46,10 +34,10 @@ middleware = [ResponseRendererMiddleware(), SQLAlchemyMiddleware()]
 renderers = [ExtJSONRenderer()]
 
 routes = [
-    Route("/", welcome, "GET"),
-    Route("/_schema", get_schema, "GET"),
-    Route("/_docs", get_docs, "GET"),
-] + [todo_routes]
+             Route("/", welcome, "GET"),
+             Route("/_schema", get_schema, "GET"),
+             Route("/_docs", get_docs, "GET"),
+         ] + [todo_routes]
 
 
 class ExtApp(App):

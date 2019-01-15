@@ -1,0 +1,10 @@
+[common]
+database_engine_dsn = "postgresql://molten:local@localhost/cookiecutter"
+
+[dev]
+database_engine_params.echo = true
+database_engine_params.connect_args.options = "-c timezone=utc"
+
+[test]
+database_engine_dsn = "postgresql://molten:local@localhost/test_cookiecutter"
+database_engine_params.echo = true

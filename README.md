@@ -20,7 +20,7 @@ $ pip-sync dev_requirements.txt requirements.txt
 ```
 #### Run tests
 ```
-$ pytest -v
+$ export ENVIRONMENT=test && pytest -v
 ```
 
 #### Using the management script
@@ -43,6 +43,9 @@ $ python manage.py runserver
 MIT Licensed.
 
 ## Changelog
+
+### 0.2.0 (01/15/2019)
+- Added TOML settings file and .coveragerc file
 
 ### 0.1.0 (12/09/2018)
 - Initial release

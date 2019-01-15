@@ -21,7 +21,7 @@ def delete_todo(todo_id: int, todo_manager: TodoManager):
     todo_manager.delete_todo(todo_id)
     return (
         HTTP_202,
-        APIResponse(status=202, message=f"Delete request for store: {todo_id} accepted"),
+        APIResponse(status=202, message=f"Delete request for todo: {todo_id} accepted"),
     )
 
 

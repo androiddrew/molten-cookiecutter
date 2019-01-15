@@ -1,0 +1,6 @@
+[run]
+source = {{cookiecutter.project_slug}}
+omit = test*
+
+[report]
+show_missing = True
