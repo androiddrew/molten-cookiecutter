@@ -10,7 +10,7 @@ $ cookiecutter https://github.com/androiddrew/cookiecutter-molten
 ```
 You will be asked for some basic information regarding your project (name, project name, etc.). This info will be used in your new project
 
-#### Create virtual env
+#### Create a virtual environment
 ```
 $ cd <app_dir>
 $ python -m venv env
@@ -23,7 +23,17 @@ $ pip-sync dev_requirements.txt requirements.txt
 $ pytest -v
 ```
 
-#### Run dev server
+#### Using the management script
+In a similar style to Django this cookiecutter provides a `manage.py` module to assist you in your development. This script is simply assembled using the [click](https://github.com/pallets/click) library. 
+
+Excuting the script with no parameters will print a list of available operations.
+```
+$ python manage.py
+```
+
+
+
+If you have installed the dev dependencies you will have access to the werkzueg dev server. Do not use this server in production.
 ```
 $ python manage.py runserver
 ```
