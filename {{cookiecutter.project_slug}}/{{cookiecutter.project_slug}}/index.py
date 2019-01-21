@@ -1,6 +1,6 @@
 import os
 from typing import Tuple
-from molten import App, Route, ResponseRendererMiddleware
+from molten import App, Route, ResponseRendererMiddleware, Settings
 from molten.http import HTTP_404, Request
 from molten.openapi import Metadata, OpenAPIHandler, OpenAPIUIHandler
 from molten.settings import SettingsComponent
@@ -52,6 +52,14 @@ class ExtApp(App):
                 message=f"The resource you are looking for {request.scheme}://{request.host}{request.path} doesn't exist",
             ),
         )
+
+    @property
+    def settings(self):
+        def _get_settings(_settings: Settings):
+            return _settings
+
+        settings = self.injector.get_resolver().resolve(_get_settings)()
+        return settings
 
 
 def create_app(_components=None, _middleware=None, _routes=None, _renderers=None):
