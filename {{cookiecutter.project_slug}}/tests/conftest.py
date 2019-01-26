@@ -11,7 +11,7 @@ from {{cookiecutter.project_slug}}.db import Base
 # requires function scope so that database is removed on every tests
 @pytest.fixture(scope="function")
 def app():
-    app = create_app()
+    _, app = create_app()
     yield app
 
 

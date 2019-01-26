@@ -1,6 +1,17 @@
 [common]
 database_engine_dsn = "postgresql://molten:local@localhost/cookiecutter"
 
+[common.wsgicors]
+headers="*"
+methods="*"
+maxage="180"
+origin="*"
+
+[common.whitenoise]
+root = "static"
+prefix = "/static"
+autorefresh = true
+
 [dev]
 database_engine_params.echo = true
 database_engine_params.connect_args.options = "-c timezone=utc"
@@ -8,3 +19,8 @@ database_engine_params.connect_args.options = "-c timezone=utc"
 [test]
 database_engine_dsn = "postgresql://molten:local@localhost/test_cookiecutter"
 database_engine_params.echo = true
+
+[prod.whitenoise]
+root = "static"
+prefix = "/static"
+autorefresh = false

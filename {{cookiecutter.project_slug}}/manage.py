@@ -2,7 +2,7 @@ import click
 from molten.contrib.sqlalchemy import EngineData
 from {{cookiecutter.project_slug}}.index import create_app
 
-app = create_app()
+_, app = create_app()
 
 
 @click.group()
