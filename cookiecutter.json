@@ -5,5 +5,7 @@
   "project_name": "molten-app",
   "project_slug": "{{ cookiecutter.project_name.lower().strip().replace(' ', '_').replace('-','_')}}",
   "description": "An molten project templated by cookiecutter-molten",
+  "cors_support": "n",
+  "static_support": "n",
   "open_source_license": ["MIT license", "BSD license", "ISC license", "Apache Software License 2.0", "GNU General Public License v3", "Not open source"]
 }

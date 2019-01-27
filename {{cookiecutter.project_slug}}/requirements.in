@@ -2,3 +2,6 @@ click
 molten
 sqlalchemy
 psycopg2-binary
+alembic
+{% if cookiecutter.cors_support == 'y' %}wsgicors{% endif %}
+{% if cookiecutter.static_support == 'y' %}whitenoise{% endif %}

@@ -15,12 +15,13 @@ You will be asked for some basic information regarding your project (name, proje
 $ cd <app_dir>
 $ python -m venv env
 $ source env/bin/activate
-$ pip install -r dev_requirements.txt
-$ pip-sync dev_requirements.txt requirements.txt
 ```
+
+Follow the initial setup steps included in the project.
+
 #### Run tests
 ```
-$ export ENVIRONMENT=test && pytest -v
+$ env ENVIRONMENT=test pytest -v
 ```
 
 #### Using the management script
@@ -44,8 +45,12 @@ MIT Licensed.
 
 ## Changelog
 
+### 0.3.0 (01/27/2019)
+- Added migrations.
+- Changed testing fixtures.
+
 ### 0.2.0 (01/15/2019)
-- Added TOML settings file and .coveragerc file
+- Added TOML settings file and .coveragerc file.
 
 ### 0.1.0 (12/09/2018)
-- Initial release
+- Initial release.

@@ -2,7 +2,7 @@ import click
 from molten.contrib.sqlalchemy import EngineData
 from {{cookiecutter.project_slug}}.index import create_app
 
-app = create_app()
+_, app = create_app()
 
 
 @click.group()
@@ -47,14 +47,15 @@ def initdb():
     """
     Initialize database
     """
-    from {{cookiecutter.project_slug}}.db import Base
-
-    def _init(engine_data: EngineData):
-        Base.metadata.create_all(bind=engine_data.engine)
-
-    click.echo("Creating database")
-    app.injector.get_resolver().resolve(_init)()
-    click.echo("Database created")
+    click.echo("This feature has been commented out. Please use alembic to manage your database initialization and changes.")
+    # from {{cookiecutter.project_slug}}.db import Base
+    #
+    # def _init(engine_data: EngineData):
+    #     Base.metadata.create_all(bind=engine_data.engine)
+    #
+    # click.echo("Creating database")
+    # app.injector.get_resolver().resolve(_init)()
+    # click.echo("Database created")
 
 
 @cli.command()
