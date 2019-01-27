@@ -4,8 +4,8 @@ import os
 import sys; sys.path.append(os.path.join(os.path.abspath(os.path.dirname(__file__)), ".."))  # noqa
 
 from alembic import context
-from {{cookiecutter.package_name}}.index import create_app
-from {{cookiecutter.package_name}}.db import Base
+from {{cookiecutter.project_slug}}.index import create_app
+from {{cookiecutter.project_slug}}.db import Base
 from molten.contrib.sqlalchemy import EngineData
 
 _, app = create_app()

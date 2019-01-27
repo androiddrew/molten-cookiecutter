@@ -1,42 +1,51 @@
 import pytest
 
 from molten import testing
-from molten.contrib.sqlalchemy import EngineData
+from molten.contrib.sqlalchemy import Session
 
 from {{cookiecutter.project_slug}}.index import create_app
-from {{cookiecutter.project_slug}}.db import Base
 
 
+def truncate_all_tables(session: Session):
+    table_names = session.execute("""
+        select table_name from information_schema.tables
+        where table_schema = 'public'
+        and table_type = 'BASE TABLE'
+        and table_name != 'alembic_version'
+    """)
+    for (table_name,) in table_names:
+        # "truncate" can deadlock so we use delete which is guaranteed not to.
+        session.execute(f"delete from {table_name}")
+    session.commit()
 
-# requires function scope so that database is removed on every tests
-@pytest.fixture(scope="function")
-def app():
+
+@pytest.fixture(scope="session")
+def app_global():
     _, app = create_app()
     yield app
 
 
-@pytest.fixture(autouse=True)
-def create_db(app):
-    """Creates a test database with session scope"""
-    def _retrieve_engine(engine_data: EngineData):
-        return engine_data.engine
-
-    engine = app.injector.get_resolver().resolve(_retrieve_engine)()
-
-    Base.metadata.create_all(bind=engine)
-
-    yield
-
-    Base.metadata.drop_all(bind=engine)
+@pytest.fixture
+def app(app_global):
+    # This is a little "clever"/piggy. We only want a single instance
+    # of the app to ever be created, but we also want to ensure that
+    # the DB is cleared after every test hence "app_global" being a
+    # session-scoped fixture and this one being test-scoped.
+    yield app_global
+    resolver = app_global.injector.get_resolver()
+    resolver.resolve(truncate_all_tables)()
 
 
-@pytest.fixture(scope="function")
+@pytest.fixture
 def client(app):
     """Creates a testing client"""
     return testing.TestClient(app)
 
 
-
-@pytest.fixture(scope="function")
-def session():
-    pass
+@pytest.fixture
+def load_component(app):
+    def load(annotation):
+        def loader(c: annotation):
+            return c
+        return app.injector.get_resolver().resolve(loader)()
+    return load
