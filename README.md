@@ -45,6 +45,9 @@ MIT Licensed.
 
 ## Changelog
 
+### 0.3.1 (02/08/2019)
+- Fixed failure in license selection.
+
 ### 0.3.0 (01/27/2019)
 - Added migrations.
 - Changed testing fixtures.
