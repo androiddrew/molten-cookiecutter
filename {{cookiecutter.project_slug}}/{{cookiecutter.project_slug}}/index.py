@@ -14,7 +14,7 @@ from whitenoise import WhiteNoise
 from .api.welcome import welcome
 from .api.todo import TodoManagerComponent, todo_routes
 from .common import ExtJSONRenderer
-from .logging import setup_logging
+from .logger import setup_logging
 from .schema import APIResponse
 from . import settings
 
