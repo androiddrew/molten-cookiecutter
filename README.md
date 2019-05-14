@@ -6,7 +6,7 @@ A Molten template for [cookiecutter](https://github.com/audreyr/cookiecutter) wi
 
 ```
 $ pip install cookiecutter
-$ cookiecutter https://github.com/androiddrew/cookiecutter-molten
+$ cookiecutter https://github.com/androiddrew/molten-cookiecutter
 ```
 You will be asked for some basic information regarding your project (name, project name, etc.). This info will be used in your new project
 
